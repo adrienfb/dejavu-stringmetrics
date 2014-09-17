@@ -2,3 +2,7 @@ target
 .settings
 .project
 .classpath
+atlassian-ide-plugin.xml
+dejavu-stringmetrics.iml
+dejavu-stringmetrics.ipr
+dejavu-stringmetrics.iws
