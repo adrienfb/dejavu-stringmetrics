@@ -20,51 +20,52 @@ import ch.ethz.student.dejavu.SimilarityMetric;
 import ch.ethz.student.dejavu.utilities.Utilities;
 
 public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
-	private static final HammingMetric metric = HammingMetric.getInstance();
-	private static final TestInput[] testInput = {
-		new TestInput("Hello world!", "Hello mamma!", 5, 0.5833),
-		new TestInput("Hello world!", "Hello mamma?", 6, 0.5),
-		new TestInput("Hello world!", "Hello world?", 1, 0.9167),
-	};
-	
-	@Override
-	protected TestInput[] getTestInput() {
-		return testInput;
-	}
 
-	@Override
-	protected DistanceMetric getDistanceMetric() {
-		return metric;
-	}
+  private static final HammingMetric metric = HammingMetric.getInstance();
+  private static final TestInput[] testInput = {
+      new TestInput("Hello world!", "Hello mamma!", 5, 0.5833),
+      new TestInput("Hello world!", "Hello mamma?", 6, 0.5),
+      new TestInput("Hello world!", "Hello world?", 1, 0.9167),
+  };
 
-	@Override
-	protected SimilarityMetric getSimilarityMetric() {
-		return metric;
-	}
-	
-	// ===== Equal Length Constraints =====
-	
-	public void testEqualLenghtConstraints() {
-		try {
-			getDistanceMetric().computeDistance("some length", "other length");
-			fail();
-		} catch (IllegalArgumentException e) {
-			// success
-		}
-	}
-	
-	@Override
-	public void testDistanceEmptyArguments() {
-		double dist = getDistanceMetric().computeDistance("", "");
-		
-		assertEquals(Utilities.DISTANCE_EMPTY_EMPTY, dist);
-	}
-	
-	@Override
-	public void testSimilarityEmptyArguments() {
-		double dist = getSimilarityMetric().computeSimilarity("", "");
-		
-		assertEquals(Utilities.SIMILARITY_EMPTY_EMPTY, dist);
-	}
+  @Override
+  protected TestInput[] getTestInput() {
+    return testInput;
+  }
+
+  @Override
+  protected DistanceMetric getDistanceMetric() {
+    return metric;
+  }
+
+  @Override
+  protected SimilarityMetric getSimilarityMetric() {
+    return metric;
+  }
+
+  // ===== Equal Length Constraints =====
+
+  public void testEqualLenghtConstraints() {
+    try {
+      getDistanceMetric().computeDistance("some length", "other length");
+      fail();
+    } catch (IllegalArgumentException e) {
+      // success
+    }
+  }
+
+  @Override
+  public void testDistanceEmptyArguments() {
+    double dist = getDistanceMetric().computeDistance("", "");
+
+    assertEquals(Utilities.DISTANCE_EMPTY_EMPTY, dist);
+  }
+
+  @Override
+  public void testSimilarityEmptyArguments() {
+    double dist = getSimilarityMetric().computeSimilarity("", "");
+
+    assertEquals(Utilities.SIMILARITY_EMPTY_EMPTY, dist);
+  }
 
 }

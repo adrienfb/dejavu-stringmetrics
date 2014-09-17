@@ -16,29 +16,30 @@ package ch.ethz.student.dejavu.tokenizer;
 
 import java.util.StringTokenizer;
 
-public class WordTokeninzer extends Tokenizer{
-	
-	private StringTokenizer sTokenizer;
+public class WordTokeninzer extends Tokenizer {
 
-	public WordTokeninzer() {}
-	
-	public WordTokeninzer(String s) {
-		super(s);
-		this.sTokenizer = new StringTokenizer(s);
-	}
-	
-	@Override
-	public boolean hasMoreTokens() {
-		return sTokenizer.hasMoreTokens();
-	}
+  private StringTokenizer sTokenizer;
 
-	@Override
-	public String nextToken() {
-		return sTokenizer.nextToken();
-	}
-	
-	@Override
-	public void reset(String s) {
-		this.sTokenizer = new StringTokenizer(s);
-	}
+  public WordTokeninzer() {
+  }
+
+  public WordTokeninzer(String s) {
+    super(s);
+    this.sTokenizer = new StringTokenizer(s);
+  }
+
+  @Override
+  public boolean hasMoreTokens() {
+    return sTokenizer.hasMoreTokens();
+  }
+
+  @Override
+  public String nextToken() {
+    return sTokenizer.nextToken();
+  }
+
+  @Override
+  public void reset(String s) {
+    this.sTokenizer = new StringTokenizer(s);
+  }
 }

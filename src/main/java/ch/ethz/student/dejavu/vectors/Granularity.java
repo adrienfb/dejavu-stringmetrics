@@ -15,27 +15,24 @@
 package ch.ethz.student.dejavu.vectors;
 
 /**
- * 
- * 
  * @author Florian Froese
- * @since   1.0
- *
+ * @since 1.0
  */
 public enum Granularity {
-	/**
-	 * CHAR_BASED String is separated characterwise
-	 */
-	CHAR_BASED,
-	/**
-	 * WORD_BASED String is separated word wise with whitespace as delimiter
-	 */
-	WORD_BASED,
-	/**
-	 * SEPERATOR_BASED String is separated by specified delimiter
-	 */
-	SEPARATOR_BASED,
-	/**
-	 * NGRAM_BASED String is split up into ngrams specified in ngram
-	 */
-	NGRAM_BASED;
+  /**
+   * CHAR_BASED String is separated characterwise
+   */
+  CHAR_BASED,
+  /**
+   * WORD_BASED String is separated word wise with whitespace as delimiter
+   */
+  WORD_BASED,
+  /**
+   * SEPERATOR_BASED String is separated by specified delimiter
+   */
+  SEPARATOR_BASED,
+  /**
+   * NGRAM_BASED String is split up into ngrams specified in ngram
+   */
+  NGRAM_BASED;
 }

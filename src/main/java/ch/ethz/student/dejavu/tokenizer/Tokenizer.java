@@ -16,27 +16,27 @@ package ch.ethz.student.dejavu.tokenizer;
 
 
 public abstract class Tokenizer {
-	
-	protected int currentPosition;
-	protected String s;
-	
-	public Tokenizer() {
-		this.currentPosition = 0;
-		this.s = null;
-	}
-	
-	public Tokenizer(String s) {
-		this.currentPosition = 0;
-		this.s = s;
-	}
-	
-	public abstract boolean hasMoreTokens();
-	
-	public abstract Object nextToken();
-	
-	public void reset(String s) {
-		this.currentPosition = 0;
-		this.s = s;
-	}
-	
+
+  protected int currentPosition;
+  protected String s;
+
+  public Tokenizer() {
+    this.currentPosition = 0;
+    this.s = null;
+  }
+
+  public Tokenizer(String s) {
+    this.currentPosition = 0;
+    this.s = s;
+  }
+
+  public abstract boolean hasMoreTokens();
+
+  public abstract Object nextToken();
+
+  public void reset(String s) {
+    this.currentPosition = 0;
+    this.s = s;
+  }
+
 }

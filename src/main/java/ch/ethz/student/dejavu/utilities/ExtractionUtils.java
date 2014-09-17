@@ -19,41 +19,42 @@ import java.util.HashMap;
 import ch.ethz.student.dejavu.tokenizer.Tokenizer;
 
 public class ExtractionUtils {
-	
-	public static HashMap<Object, Integer> getTokenVector(HashMap<Object, Integer> vec, Tokenizer tokenizer) {
-		
-		while (tokenizer.hasMoreTokens()) {
-			Object token = tokenizer.nextToken();
-			int count = 0;
-			if (vec.containsKey(token)) {
-				count = vec.get(token);
-			}
-			count++;
-			vec.put(token, count);
-		}
-		
-		return vec;
-	}
-	
-	public static HashMap<Object, Integer> getTokenVector(Tokenizer tokenizer) {
-		HashMap<Object, Integer> map = new HashMap<Object, Integer>();
-		
-		return getTokenVector(map, tokenizer);
-	}
-	
-	public static HashMap<Object, Double> getTokenVectorDouble(Tokenizer tokenizer) {
-		HashMap<Object, Double> vec = new HashMap<Object, Double>();
-		
-		while (tokenizer.hasMoreTokens()) {
-			Object token = tokenizer.nextToken();
-			double count = 0;
-			if (vec.containsKey(token)) {
-				count = vec.get(token);
-			}
-			count++;
-			vec.put(token, count);
-		}
-		
-		return vec;
-	}
+
+  public static HashMap<Object, Integer> getTokenVector(HashMap<Object, Integer> vec,
+                                                        Tokenizer tokenizer) {
+
+    while (tokenizer.hasMoreTokens()) {
+      Object token = tokenizer.nextToken();
+      int count = 0;
+      if (vec.containsKey(token)) {
+        count = vec.get(token);
+      }
+      count++;
+      vec.put(token, count);
+    }
+
+    return vec;
+  }
+
+  public static HashMap<Object, Integer> getTokenVector(Tokenizer tokenizer) {
+    HashMap<Object, Integer> map = new HashMap<Object, Integer>();
+
+    return getTokenVector(map, tokenizer);
+  }
+
+  public static HashMap<Object, Double> getTokenVectorDouble(Tokenizer tokenizer) {
+    HashMap<Object, Double> vec = new HashMap<Object, Double>();
+
+    while (tokenizer.hasMoreTokens()) {
+      Object token = tokenizer.nextToken();
+      double count = 0;
+      if (vec.containsKey(token)) {
+        count = vec.get(token);
+      }
+      count++;
+      vec.put(token, count);
+    }
+
+    return vec;
+  }
 }

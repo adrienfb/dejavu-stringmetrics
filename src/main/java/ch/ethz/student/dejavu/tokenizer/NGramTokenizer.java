@@ -14,33 +14,33 @@
 */
 package ch.ethz.student.dejavu.tokenizer;
 
-public class NGramTokenizer extends Tokenizer{
+public class NGramTokenizer extends Tokenizer {
 
-	private int n;
-	
-	public NGramTokenizer(int nGrams) {
-		super();
-		this.n = nGrams;
-	}
-	
-	public NGramTokenizer(String s, int nGrams) {
-		super(s);
-		this.n = nGrams;
-	}
+  private int n;
 
-	@Override
-	public boolean hasMoreTokens() {
-		return currentPosition + (n-1) < s.length();
-	}
+  public NGramTokenizer(int nGrams) {
+    super();
+    this.n = nGrams;
+  }
 
-	@Override
-	public String nextToken() {
-		String token = null;
-		if (currentPosition + n <= s.length()) {
-			token = s.substring(currentPosition, currentPosition + (n-1));
-			currentPosition++;
-		}
-		return token;
-	}
+  public NGramTokenizer(String s, int nGrams) {
+    super(s);
+    this.n = nGrams;
+  }
+
+  @Override
+  public boolean hasMoreTokens() {
+    return currentPosition + (n - 1) < s.length();
+  }
+
+  @Override
+  public String nextToken() {
+    String token = null;
+    if (currentPosition + n <= s.length()) {
+      token = s.substring(currentPosition, currentPosition + (n - 1));
+      currentPosition++;
+    }
+    return token;
+  }
 
 }

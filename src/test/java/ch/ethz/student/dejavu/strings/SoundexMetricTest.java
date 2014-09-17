@@ -18,43 +18,43 @@ import junit.framework.TestCase;
 
 public class SoundexMetricTest extends TestCase {
 
-	public void testNullArgument() {
-		try {
-			SoundexMetric.getInstance().computeCode(null);
-			fail();
-		} catch (IllegalArgumentException e) {
-			// success
-		}
-	}
-	
-	public void testEmptyArgument() {
-		try {
-			SoundexMetric.getInstance().computeCode(null);
-			fail();
-		} catch (IllegalArgumentException e) {
-			// success
-		}
-	}
-	
-	public void testCode() {
-		
-		SoundexMetric m = SoundexMetric.getInstance();
-		
-		// archives.gov examples
-		assertEquals("W252", m.computeCode("Washington"));
-		assertEquals("L000", m.computeCode("Lee"));
-		assertEquals("G362", m.computeCode("Gutierrez"));
-		assertEquals("P236", m.computeCode("Pfister"));
-		assertEquals("J250", m.computeCode("Jackson"));
-		assertEquals("T522", m.computeCode("Tymczak"));
-		assertEquals("V532", m.computeCode("VanDeusen"));
-		assertEquals("A261", m.computeCode("Ashcraft"));
+  public void testNullArgument() {
+    try {
+      SoundexMetric.getInstance().computeCode(null);
+      fail();
+    } catch (IllegalArgumentException e) {
+      // success
+    }
+  }
 
-		// other examples
-		assertEquals("F161", m.computeCode("Favre-Bully"));
-		assertEquals("F620", m.computeCode("Froese"));
-		assertEquals("S535", m.computeCode("Schmidtmeister"));
-		assertEquals("G400", m.computeCode("Geel"));
-	}
+  public void testEmptyArgument() {
+    try {
+      SoundexMetric.getInstance().computeCode(null);
+      fail();
+    } catch (IllegalArgumentException e) {
+      // success
+    }
+  }
+
+  public void testCode() {
+
+    SoundexMetric m = SoundexMetric.getInstance();
+
+    // archives.gov examples
+    assertEquals("W252", m.computeCode("Washington"));
+    assertEquals("L000", m.computeCode("Lee"));
+    assertEquals("G362", m.computeCode("Gutierrez"));
+    assertEquals("P236", m.computeCode("Pfister"));
+    assertEquals("J250", m.computeCode("Jackson"));
+    assertEquals("T522", m.computeCode("Tymczak"));
+    assertEquals("V532", m.computeCode("VanDeusen"));
+    assertEquals("A261", m.computeCode("Ashcraft"));
+
+    // other examples
+    assertEquals("F161", m.computeCode("Favre-Bully"));
+    assertEquals("F620", m.computeCode("Froese"));
+    assertEquals("S535", m.computeCode("Schmidtmeister"));
+    assertEquals("G400", m.computeCode("Geel"));
+  }
 
 }

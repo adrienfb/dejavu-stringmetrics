@@ -21,93 +21,100 @@ import ch.ethz.student.dejavu.utilities.Utilities;
 
 
 /**
- * Hamming distance implementation 
- * 
- * The Hamming distance compares two strings of equal length and returns the number of non-matching characters
- * 
- * <p>For creation please use default HammignDistance or the Builder {@link Builder} provided by the static methods.</p>
- * 
+ * Hamming distance implementation
+ *
+ * The Hamming distance compares two strings of equal length and returns the number of non-matching
+ * characters
+ *
+ * <p>For creation please use default HammignDistance or the Builder {@link Builder} provided by the
+ * static methods.</p>
+ *
  * <p>Wikipedia: <a href="http://en.wikipedia.org/wiki/Hamming_distance">http://en.wikipedia.org/wiki/Hamming_distance</a></p>
- * 
+ *
  * @author Adrien Favre-Bully
  * @author Florian Froese
  * @author Adrian Schmidmeister
- * @since   1.0
- *
+ * @since 1.0
  */
 public class HammingMetric implements DistanceMetric, SimilarityMetric {
 
-	// ===== Metric Methods =====
-	
-	@Override
-	public double computeSimilarity(String s1, String s2) {
-		if (!Utilities.checkInputs(s1, s2))
-			return Utilities.SIMILARITY_EMPTY_EMPTY;
-		
-		double dist = computeDistance(s1, s2);
+  // ===== Metric Methods =====
 
-		return 1- (dist / s1.length());
-	}
+  @Override
+  public double computeSimilarity(String s1, String s2) {
+    if (!Utilities.checkInputs(s1, s2)) {
+      return Utilities.SIMILARITY_EMPTY_EMPTY;
+    }
 
-	@Override
-	public double computeDistance(String s1, String s2) {
-		if (!Utilities.checkInputs(s1, s2))
-			return Utilities.DISTANCE_EMPTY_EMPTY;
-		
-		double dist = 0;
+    double dist = computeDistance(s1, s2);
 
-		if (s1.length() != s2.length())
-			throw new IllegalArgumentException("Input strings must be of equal length");
+    return 1 - (dist / s1.length());
+  }
 
-		char[] c1 = s1.toCharArray();
-		char[] c2 = s2.toCharArray();
+  @Override
+  public double computeDistance(String s1, String s2) {
+    if (!Utilities.checkInputs(s1, s2)) {
+      return Utilities.DISTANCE_EMPTY_EMPTY;
+    }
 
+    double dist = 0;
 
-		for (int i=0; i<c1.length; i++)
-			if (c1[i] != c2[i])
-				dist++;
+    if (s1.length() != s2.length()) {
+      throw new IllegalArgumentException("Input strings must be of equal length");
+    }
 
-		return dist;
-	}
-	
-	// ===== Builder Pattern Methods =====
+    char[] c1 = s1.toCharArray();
+    char[] c2 = s2.toCharArray();
 
-	private HammingMetric(Builder b) {}
-	
-	/**
-	 * @return	{@link Builder}
-	 * @see Builder
-	 * @see HammingMetric
-	 */
-	public static Builder getBuilder() {
-		return new Builder();
-	}
+    for (int i = 0; i < c1.length; i++) {
+      if (c1[i] != c2[i]) {
+        dist++;
+      }
+    }
 
-	/**
-	 * @return	standard Hamming distance object that can be used to determine the distance between two strings
-	 * @see HammingMetric
-	 */
-	public static HammingMetric getInstance() {
-		return new Builder().build();
-	}
+    return dist;
+  }
 
-	// ===== Builder Class =====
+  // ===== Builder Pattern Methods =====
 
-	/**
-	 * HammingDistance Builder
-	 * 
-	 * <p>No parameters, just call build()</p>
-	 * 
-	 * @author Adrien Favre-Bully
-	 * @author Florian Froese
-	 * @author Adrian Schmidmeister
-	 * @since 1.0
-	 */
-	public static class Builder {
+  private HammingMetric(Builder b) {
+  }
 
-		public HammingMetric build() {
-			return new HammingMetric(this);
-		}
-	}
+  /**
+   * @return        {@link Builder}
+   * @see Builder
+   * @see HammingMetric
+   */
+  public static Builder getBuilder() {
+    return new Builder();
+  }
+
+  /**
+   * @return standard Hamming distance object that can be used to determine the distance between two
+   * strings
+   * @see HammingMetric
+   */
+  public static HammingMetric getInstance() {
+    return new Builder().build();
+  }
+
+  // ===== Builder Class =====
+
+  /**
+   * HammingDistance Builder
+   *
+   * <p>No parameters, just call build()</p>
+   *
+   * @author Adrien Favre-Bully
+   * @author Florian Froese
+   * @author Adrian Schmidmeister
+   * @since 1.0
+   */
+  public static class Builder {
+
+    public HammingMetric build() {
+      return new HammingMetric(this);
+    }
+  }
 
 }

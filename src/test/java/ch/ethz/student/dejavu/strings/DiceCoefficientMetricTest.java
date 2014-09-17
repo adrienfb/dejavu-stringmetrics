@@ -18,22 +18,23 @@ import ch.ethz.student.dejavu.AbstractSimilarityMetricTest;
 import ch.ethz.student.dejavu.SimilarityMetric;
 
 public class DiceCoefficientMetricTest extends AbstractSimilarityMetricTest {
-	private static final DiceCoefficientMetric metric = DiceCoefficientMetric.getInstance();
-	private static final TestInput[] testInput = {
-		new TestInput("Hello world!", "Hello world?", 0.9090),
-		new TestInput("Hello world?", "Hello mamma?", 0.4761),
-		new TestInput("Bigrams are great", "Bigrams are the worst", 0.6666),
-		new TestInput("bag of words model", "model of bag words", 0.8823),
-	};
-	
-	@Override
-	protected TestInput[] getTestInput() {
-		return testInput;
-	}
 
-	@Override
-	protected SimilarityMetric getSimilarityMetric() {
-		return metric;
-	}
+  private static final DiceCoefficientMetric metric = DiceCoefficientMetric.getInstance();
+  private static final TestInput[] testInput = {
+      new TestInput("Hello world!", "Hello world?", 0.9090),
+      new TestInput("Hello world?", "Hello mamma?", 0.4761),
+      new TestInput("Bigrams are great", "Bigrams are the worst", 0.6666),
+      new TestInput("bag of words model", "model of bag words", 0.8823),
+  };
+
+  @Override
+  protected TestInput[] getTestInput() {
+    return testInput;
+  }
+
+  @Override
+  protected SimilarityMetric getSimilarityMetric() {
+    return metric;
+  }
 
 }

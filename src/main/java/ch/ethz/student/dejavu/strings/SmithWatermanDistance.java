@@ -20,13 +20,13 @@ import ch.ethz.student.dejavu.SimilarityMetric;
 import ch.ethz.student.dejavu.utilities.Utilities;
 
 /**
- * The Smith-Waterman algorithm performs local sequence alignment; that is, 
- * for determining similar regions between two strings or nucleotide or protein sequences. 
- * Instead of looking at the total sequence, the Smith-Waterman algorithm compares 
- * segments of all possible lengths and optimizes the similarity measure.
- * 
+ * The Smith-Waterman algorithm performs local sequence alignment; that is, for determining similar
+ * regions between two strings or nucleotide or protein sequences. Instead of looking at the total
+ * sequence, the Smith-Waterman algorithm compares segments of all possible lengths and optimizes
+ * the similarity measure.
+ *
  * For creation please use default SmithWatermanDistance or the Builder {@link Builder}.
- * 
+ *
  * <p>Wikipedia: <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">http://en.wikipedia.org/wiki/Levenshtein_distance</a></p>
  *
  * @author Adrien Favre-Bully
@@ -35,167 +35,163 @@ import ch.ethz.student.dejavu.utilities.Utilities;
  * @since 1.0
  */
 public class SmithWatermanDistance implements DistanceMetric, SimilarityMetric {
-	private static final double DEFAULT_MATCH_SCORE = 2.0;
-	private static final double DEFAULT_MISMATCH_SCORE = -1.0;
-	private static final double DEFAULT_GAP_SCORE = -1.0;
 
-	private double matchScore;
-	private double mismatchScore;
-	private double gapScore;
+  private static final double DEFAULT_MATCH_SCORE = 2.0;
+  private static final double DEFAULT_MISMATCH_SCORE = -1.0;
+  private static final double DEFAULT_GAP_SCORE = -1.0;
 
-	private SmithWatermanDistance(Builder b) {
-		matchScore = b.bMatchScore;
-		mismatchScore = b.bMismatchScore;
-		gapScore = b.bGapScore;
-	}
+  private double matchScore;
+  private double mismatchScore;
+  private double gapScore;
 
+  private SmithWatermanDistance(Builder b) {
+    matchScore = b.bMatchScore;
+    mismatchScore = b.bMismatchScore;
+    gapScore = b.bGapScore;
+  }
 
-	// ===== Metric Methods =====
+  // ===== Metric Methods =====
 
-	@Override
-	public double computeSimilarity(String s1, String s2) {
-		if (!Utilities.checkInputs(s1, s2))
-			return Utilities.SIMILARITY_EMPTY_EMPTY;
-		
-		double dist = computeDistance(s1, s2);
+  @Override
+  public double computeSimilarity(String s1, String s2) {
+    if (!Utilities.checkInputs(s1, s2)) {
+      return Utilities.SIMILARITY_EMPTY_EMPTY;
+    }
 
-		return dist / Utilities.max(s1.length(),s2.length()) / matchScore;
-	}
+    double dist = computeDistance(s1, s2);
 
-	/**
-	 * @return double Smith-Waterman Distance between String s1 and s2
-	 * @param s1 String, first string
-	 * @param s2 String, second string
-	 */
-	@Override
-	public double computeDistance(String s1, String s2) {
-		if (!Utilities.checkInputs(s1, s2))
-			return Utilities.DISTANCE_EMPTY_EMPTY;
-		
-		double alignment[][] = new double[s1.length()+1][s2.length()+1];
-		double mismatchScore = this.mismatchScore;
-		double matchScore = this.matchScore;
-		double gapScore = this.gapScore;
+    return dist / Utilities.max(s1.length(), s2.length()) / matchScore;
+  }
 
-		double match, delete, insert, cost;
+  /**
+   * @param s1 String, first string
+   * @param s2 String, second string
+   * @return double Smith-Waterman Distance between String s1 and s2
+   */
+  @Override
+  public double computeDistance(String s1, String s2) {
+    if (!Utilities.checkInputs(s1, s2)) {
+      return Utilities.DISTANCE_EMPTY_EMPTY;
+    }
 
-		double maxScore = 0.0;
+    double alignment[][] = new double[s1.length() + 1][s2.length() + 1];
+    double mismatchScore = this.mismatchScore;
+    double matchScore = this.matchScore;
+    double gapScore = this.gapScore;
 
-		for (int i=0; i<=s1.length(); i++)
-			alignment[i][0] = 0;
+    double match, delete, insert, cost;
 
-		for (int j=0; j<=s2.length(); j++)
-			alignment[0][j] = 0;
+    double maxScore = 0.0;
 
-		for (int i=1; i<=s1.length(); i++)
-		{
-			for (int j=1; j<=s2.length(); j++)
-			{
-				if (s1.charAt(i-1) == s2.charAt(j-1))
-				{
-					cost = matchScore;
-				}
-				else
-				{
-					cost = mismatchScore;
-				}
-				match = alignment[i-1][j-1] + cost;
-				delete = alignment[i-1][j] + gapScore;
-				insert = alignment[i][j-1] + gapScore;
-				alignment[i][j] = Utilities.max(match, delete, insert, 0);
-				if (alignment[i][j] > maxScore)
-					maxScore = alignment[i][j];
-			}
-		}
+    for (int i = 0; i <= s1.length(); i++) {
+      alignment[i][0] = 0;
+    }
 
-		return maxScore;
-	}
+    for (int j = 0; j <= s2.length(); j++) {
+      alignment[0][j] = 0;
+    }
 
+    for (int i = 1; i <= s1.length(); i++) {
+      for (int j = 1; j <= s2.length(); j++) {
+        if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+          cost = matchScore;
+        } else {
+          cost = mismatchScore;
+        }
+        match = alignment[i - 1][j - 1] + cost;
+        delete = alignment[i - 1][j] + gapScore;
+        insert = alignment[i][j - 1] + gapScore;
+        alignment[i][j] = Utilities.max(match, delete, insert, 0);
+        if (alignment[i][j] > maxScore) {
+          maxScore = alignment[i][j];
+        }
+      }
+    }
 
-	// ===== Builder Methods =====
-	/**
-	 * @return	{@link Builder}
-	 * @see Builder
-	 * @see SmithWatermanDistance
-	 */
-	public static Builder getBuilder()
-	{
-		return new Builder();
-	}
-	/**
-	 * @return A standard SmithWatermanDistance object
-	 * @return	{@link SmithWatermanDistance}
-	 * @see SmithWatermanDistance
-	 */
-	public static SmithWatermanDistance getInstance()
-	{
-		return new Builder().build();
-	}
-	// ===== Builder Class =====
-	/**
-	 * SmithWatermanDistance Builder
-	 * 
-	 * @author Adrien Favre-Bully
-	 * @author Florian Froese
-	 * @author Adrian Schmidmeister
-	 * @since 1.0
-	 */
-	public static class Builder
-	{
-		private double bMatchScore;
-		private double bMismatchScore;
-		private double bGapScore;
+    return maxScore;
+  }
 
-		public Builder()
-		{
-			bMatchScore = DEFAULT_MATCH_SCORE;
-			bMismatchScore = DEFAULT_MISMATCH_SCORE;
-			bGapScore = DEFAULT_GAP_SCORE;
-		}
+  // ===== Builder Methods =====
 
-		public SmithWatermanDistance build()
-		{
-			// parameters have no constraints
+  /**
+   * @return        {@link Builder}
+   * @see Builder
+   * @see SmithWatermanDistance
+   */
+  public static Builder getBuilder() {
+    return new Builder();
+  }
 
-			SmithWatermanDistance d = new SmithWatermanDistance(this);
+  /**
+   * @return A standard SmithWatermanDistance object
+   * @return        {@link SmithWatermanDistance}
+   * @see SmithWatermanDistance
+   */
+  public static SmithWatermanDistance getInstance() {
+    return new Builder().build();
+  }
+  // ===== Builder Class =====
 
-			return d;
-		}
+  /**
+   * SmithWatermanDistance Builder
+   *
+   * @author Adrien Favre-Bully
+   * @author Florian Froese
+   * @author Adrian Schmidmeister
+   * @since 1.0
+   */
+  public static class Builder {
 
-		/**
-		 * Match score (can be any double)
-		 * @param matchScore double
-		 * @return this builder object
-		 */
-		public Builder matchScore(double matchScore)
-		{
-			bMatchScore = matchScore;
-			return this;
-		}
+    private double bMatchScore;
+    private double bMismatchScore;
+    private double bGapScore;
 
-		/**
-		 * Mismatch score (can be any double)
-		 * 
-		 * @param mismatchScore double
-		 * @return this builder object
-		 */
-		public Builder mismatchScore(double mismatchScore)
-		{
-			bMismatchScore = mismatchScore;
-			return this;
-		}
+    public Builder() {
+      bMatchScore = DEFAULT_MATCH_SCORE;
+      bMismatchScore = DEFAULT_MISMATCH_SCORE;
+      bGapScore = DEFAULT_GAP_SCORE;
+    }
 
-		/**
-		 * Gap score (can be any double)
-		 * 
-		 * @param gapScore double
-		 * @return this builder object
-		 */
-		public Builder gapScore(double gapScore)
-		{
-			bGapScore = gapScore;
-			return this;
-		}
-	}
+    public SmithWatermanDistance build() {
+      // parameters have no constraints
+
+      SmithWatermanDistance d = new SmithWatermanDistance(this);
+
+      return d;
+    }
+
+    /**
+     * Match score (can be any double)
+     *
+     * @param matchScore double
+     * @return this builder object
+     */
+    public Builder matchScore(double matchScore) {
+      bMatchScore = matchScore;
+      return this;
+    }
+
+    /**
+     * Mismatch score (can be any double)
+     *
+     * @param mismatchScore double
+     * @return this builder object
+     */
+    public Builder mismatchScore(double mismatchScore) {
+      bMismatchScore = mismatchScore;
+      return this;
+    }
+
+    /**
+     * Gap score (can be any double)
+     *
+     * @param gapScore double
+     * @return this builder object
+     */
+    public Builder gapScore(double gapScore) {
+      bGapScore = gapScore;
+      return this;
+    }
+  }
 
 }

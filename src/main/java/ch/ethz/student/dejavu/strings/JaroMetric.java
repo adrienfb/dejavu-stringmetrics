@@ -20,104 +20,111 @@ import ch.ethz.student.dejavu.utilities.Utilities;
 
 
 /**
- * Jaro distance implementation 
- * 
+ * Jaro distance implementation
+ *
  * The implementation follows the definition given by Wikipedia
- * 
- * <p>For creation please use default JaroDistance or the Builder {@link Builder} provided by the static methods.</p>
- * 
+ *
+ * <p>For creation please use default JaroDistance or the Builder {@link Builder} provided by the
+ * static methods.</p>
+ *
  * <p>Wikipedia: <a href="http://en.wikipedia.org/wiki/Jaro-Winkler_distance">http://en.wikipedia.org/wiki/Jaro-Winkler_distance</a></p>
- * 
+ *
  * @author Adrien Favre-Bully
  * @author Florian Froese
  * @author Adrian Schmidmeister
- * @since   1.0
- *
+ * @since 1.0
  */
 public class JaroMetric implements SimilarityMetric {
 
-	// ===== Metric Methods =====
+  // ===== Metric Methods =====
 
-	@Override
-	public double computeSimilarity(String s1, String s2) {
-		if (!Utilities.checkInputs(s1, s2))
-			return Utilities.SIMILARITY_EMPTY_EMPTY;
-		
-		int window = Math.max(s1.length(), s2.length()) / 2 - 1;
-		StringBuilder matchings12 = getMatchings(s1, s2, window);
-		StringBuilder matchings21 = getMatchings(s2, s1, window);
+  @Override
+  public double computeSimilarity(String s1, String s2) {
+    if (!Utilities.checkInputs(s1, s2)) {
+      return Utilities.SIMILARITY_EMPTY_EMPTY;
+    }
 
-		// if zero matchings return immediately
-		if (matchings12.length() == 0)
-			return 0d;
+    int window = Math.max(s1.length(), s2.length()) / 2 - 1;
+    StringBuilder matchings12 = getMatchings(s1, s2, window);
+    StringBuilder matchings21 = getMatchings(s2, s1, window);
 
-		// else compute transpositions
-		int t = 0;
-		for (int i=0; i<matchings12.length(); i++)
-			if (matchings12.charAt(i) != matchings21.charAt(i))
-				t++;
+    // if zero matchings return immediately
+    if (matchings12.length() == 0) {
+      return 0d;
+    }
 
-		// compute Jaro distance
-		int m = matchings12.length();
-		return 1d/3d * ( (double)m / (double)s1.length() + (double)m / (double)s2.length() + (double)(m - (double)t/2) / (double)m);
-	}
-	
-	private StringBuilder getMatchings(String a, String b, int window) {
-		StringBuilder matchings = new StringBuilder();
-		boolean[] matched = new boolean[b.length()];
+    // else compute transpositions
+    int t = 0;
+    for (int i = 0; i < matchings12.length(); i++) {
+      if (matchings12.charAt(i) != matchings21.charAt(i)) {
+        t++;
+      }
+    }
 
-		for (int i=0; i<a.length(); i++) {
-			for (int j=Math.max(0, i-window); j<Math.min(b.length(), i+window+1); j++) {
-				if (a.charAt(i) == b.charAt(j) && !matched[j]) {
-					matched[j] = true;
-					matchings.append(a.charAt(i));
-					break;
-				}
+    // compute Jaro distance
+    int m = matchings12.length();
+    return 1d / 3d * ((double) m / (double) s1.length() + (double) m / (double) s2.length()
+                      + (double) (m - (double) t / 2) / (double) m);
+  }
 
-			}
-		}
+  private StringBuilder getMatchings(String a, String b, int window) {
+    StringBuilder matchings = new StringBuilder();
+    boolean[] matched = new boolean[b.length()];
 
-		return matchings;
-	}
+    for (int i = 0; i < a.length(); i++) {
+      for (int j = Math.max(0, i - window); j < Math.min(b.length(), i + window + 1); j++) {
+        if (a.charAt(i) == b.charAt(j) && !matched[j]) {
+          matched[j] = true;
+          matchings.append(a.charAt(i));
+          break;
+        }
 
-	// ===== Builder Pattern Methods =====
-	
-	private JaroMetric(Builder b) {}
+      }
+    }
 
-	/**
-	 * @return	{@link Builder}
-	 * @see Builder
-	 * @see JaroMetric
-	 */
-	public static Builder getBuilder() {
-		return new Builder();
-	}
+    return matchings;
+  }
 
-	/**
-	 * @return	standard Jaro distance object that can be used to determine the distance between two strings
-	 * @see JaroMetric
-	 */
-	public static JaroMetric getInstance() {
-		return new Builder().build();
-	}
+  // ===== Builder Pattern Methods =====
 
-	// ===== Builder Class =====
+  private JaroMetric(Builder b) {
+  }
 
-	/**
-	 * JaroDistance Builder
-	 * 
-	 * <p>No parameters, just call build()</p>
-	 * 
-	 * @author Adrien Favre-Bully
-	 * @author Florian Froese
-	 * @author Adrian Schmidmeister
-	 * @since 1.0
-	 */
-	public static class Builder {
+  /**
+   * @return {@link Builder}
+   * @see Builder
+   * @see JaroMetric
+   */
+  public static Builder getBuilder() {
+    return new Builder();
+  }
 
-		public JaroMetric build() {
-			return new JaroMetric(this);
-		}
-	}
+  /**
+   * @return standard Jaro distance object that can be used to determine the distance between two
+   * strings
+   * @see JaroMetric
+   */
+  public static JaroMetric getInstance() {
+    return new Builder().build();
+  }
+
+  // ===== Builder Class =====
+
+  /**
+   * JaroDistance Builder
+   *
+   * <p>No parameters, just call build()</p>
+   *
+   * @author Adrien Favre-Bully
+   * @author Florian Froese
+   * @author Adrian Schmidmeister
+   * @since 1.0
+   */
+  public static class Builder {
+
+    public JaroMetric build() {
+      return new JaroMetric(this);
+    }
+  }
 
 }

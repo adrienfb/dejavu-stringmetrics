@@ -14,183 +14,200 @@
  */
 package ch.ethz.student.dejavu;
 
+import junit.framework.TestCase;
+
 import java.util.Random;
 
 import ch.ethz.student.dejavu.strings.HammingMetric;
-import junit.framework.TestCase;
 
 public abstract class AbstractDistanceAndSimilarityMetricTest extends TestCase {
 
-	private DistanceMetricTest distanceMetricTest;
-	private SimilarityMetricTest similarityMetricTest;
+  private DistanceMetricTest distanceMetricTest;
+  private SimilarityMetricTest similarityMetricTest;
 
+  // ===== Constructor =====
 
-	// ===== Constructor =====
+  public AbstractDistanceAndSimilarityMetricTest() {
+    distanceMetricTest = new DistanceMetricTest(getTestInput());
+    similarityMetricTest = new SimilarityMetricTest(getTestInput());
+  }
 
-	public AbstractDistanceAndSimilarityMetricTest() {
-		distanceMetricTest = new DistanceMetricTest(getTestInput());
-		similarityMetricTest = new SimilarityMetricTest(getTestInput());
-	}
+  // ===== Metric Specific =====
 
-	// ===== Metric Specific =====
+  protected abstract TestInput[] getTestInput();
 
-	protected abstract TestInput[] getTestInput();
+  protected abstract DistanceMetric getDistanceMetric();
 
-	protected abstract DistanceMetric getDistanceMetric();
+  protected abstract SimilarityMetric getSimilarityMetric();
 
-	protected abstract SimilarityMetric getSimilarityMetric();
+  // ===== Distance Metric Tests =====
 
-	// ===== Distance Metric Tests =====
+  public void testDistanceNullArguments() {
+    distanceMetricTest.testNullArguments();
+  }
 
-	public void testDistanceNullArguments() {
-		distanceMetricTest.testNullArguments();
-	}
+  public void testDistanceEmptyArguments() {
+    distanceMetricTest.testEmptyArguments();
+  }
 
-	public void testDistanceEmptyArguments() {
-		distanceMetricTest.testEmptyArguments();
-	}
+  public void testDistanceCommutativity() {
+    distanceMetricTest.testCommutativity();
+  }
 
-	public void testDistanceCommutativity() {
-		distanceMetricTest.testCommutativity();
-	}
+  public void testDistanceToSelf() {
+    distanceMetricTest.testDistanceToSelf();
+  }
 
-	public void testDistanceToSelf() {
-		distanceMetricTest.testDistanceToSelf();
-	}
+  public void testDistance() {
+    distanceMetricTest.testDistance();
+  }
 
-	public void testDistance() {
-		distanceMetricTest.testDistance();
-	}
+  // ===== Similarity Metric Tests =====
 
-	// ===== Similarity Metric Tests =====
+  public void testSimilarityNullArguments() {
+    similarityMetricTest.testNullArguments();
+  }
 
-	public void testSimilarityNullArguments() {
-		similarityMetricTest.testNullArguments();
-	}
+  public void testSimilarityEmptyArguments() {
+    similarityMetricTest.testEmptyArguments();
+  }
 
-	public void testSimilarityEmptyArguments() {
-		similarityMetricTest.testEmptyArguments();
-	}
+  public void testSimilarityCommutativity() {
+    similarityMetricTest.testCommutativity();
+  }
 
-	public void testSimilarityCommutativity() {
-		similarityMetricTest.testCommutativity();
-	}
+  public void testSimilarityToSelf() {
+    similarityMetricTest.testSimilarityToSelf();
+  }
 
-	public void testSimilarityToSelf() {
-		similarityMetricTest.testSimilarityToSelf();
-	}
+  public void testSimilarity() {
+    similarityMetricTest.testSimilarity();
+  }
 
-	public void testSimilarity() {
-		similarityMetricTest.testSimilarity();
-	}
+  public void testSimilarityBounds() {
+    if (getSimilarityMetric() instanceof HammingMetric) {
+      for (int i = 0; i < TestUtils.N; i++) {
+        String s1 = TestUtils.getRandomString(TestUtils.MAX_LEN + 1);
+        String s2 = TestUtils.getRandomString(TestUtils.MAX_LEN + 1);
+        double s = getSimilarityMetric().computeSimilarity(s1, s2);
 
-	public void testSimilarityBounds() {
-		if (getSimilarityMetric() instanceof HammingMetric) {
-			for (int i=0; i<TestUtils.N; i++) {
-				String s1 = TestUtils.getRandomString(TestUtils.MAX_LEN+1);
-				String s2 = TestUtils.getRandomString(TestUtils.MAX_LEN+1);
-				double s = getSimilarityMetric().computeSimilarity(s1, s2);
+        assertTrue(
+            "Similarity s=" + s + " not in bounds [0,1] for input s1='" + s1 + "' and s2='" + s2
+            + "'", s >= 0 && s <= 1);
+      }
+    } else {
+      Random rand = new Random();
 
-				assertTrue("Similarity s="+s+" not in bounds [0,1] for input s1='"+s1+"' and s2='"+s2+"'", s>=0 && s<=1);
-			}
-		} else {
-			Random rand = new Random();
+      for (int i = 0; i < TestUtils.N; i++) {
+        String
+            s1 =
+            TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
+        String
+            s2 =
+            TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
+        double s = getSimilarityMetric().computeSimilarity(s1, s2);
 
-			for (int i=0; i<TestUtils.N; i++) {
-				String s1 = TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN+1)+TestUtils.MIN_LEN);
-				String s2 = TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN+1)+TestUtils.MIN_LEN);
-				double s = getSimilarityMetric().computeSimilarity(s1, s2);
+        assertTrue(
+            "Similarity s=" + s + " not in bounds [0,1] for input s1='" + s1 + "' and s2='" + s2
+            + "'", s >= 0 && s <= 1);
+      }
+    }
+  }
 
-				assertTrue("Similarity s="+s+" not in bounds [0,1] for input s1='"+s1+"' and s2='"+s2+"'", s>=0 && s<=1);
-			}
-		}
-	}
+  public void testRobustness() {
+    if (getSimilarityMetric() instanceof HammingMetric) {
+      for (int i = 0; i < TestUtils.N; i++) {
+        String s1 = TestUtils.getRandomString(TestUtils.MAX_LEN + 1);
+        String s2 = TestUtils.getRandomString(TestUtils.MAX_LEN + 1);
 
-	public void testRobustness() {
-		if (getSimilarityMetric() instanceof HammingMetric) {
-			for (int i=0; i<TestUtils.N; i++) {
-				String s1 = TestUtils.getRandomString(TestUtils.MAX_LEN+1);
-				String s2 = TestUtils.getRandomString(TestUtils.MAX_LEN+1);
+        try {
+          getSimilarityMetric().computeSimilarity(s1, s2);
+        } catch (Exception e) {
+          fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
+        }
+      }
+    } else {
+      Random rand = new Random();
 
-				try {
-					getSimilarityMetric().computeSimilarity(s1, s2);
-				} catch(Exception e) {
-					fail("Excpection is thrown for input s1='"+s1+"' and s2='"+s2+"'");
-				}
-			}
-		} else {
-			Random rand = new Random();
+      for (int i = 0; i < TestUtils.N; i++) {
+        String
+            s1 =
+            TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
+        String
+            s2 =
+            TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
 
-			for (int i=0; i<TestUtils.N; i++) {
-				String s1 = TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN+1)+TestUtils.MIN_LEN);
-				String s2 = TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN+1)+TestUtils.MIN_LEN);
+        try {
+          getSimilarityMetric().computeSimilarity(s1, s2);
+        } catch (Exception e) {
+          fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
+        }
+      }
+    }
+  }
 
-				try {
-					getSimilarityMetric().computeSimilarity(s1, s2);
-				} catch(Exception e) {
-					fail("Excpection is thrown for input s1='"+s1+"' and s2='"+s2+"'");
-				}
-			}
-		}
-	}
+  // ===== Helper Classes =====
 
-	// ===== Helper Classes =====
+  public static class TestInput {
 
-	public static class TestInput {
-		public String s1;
-		public String s2;
-		public double dist;
-		public double sim;
+    public String s1;
+    public String s2;
+    public double dist;
+    public double sim;
 
-		public TestInput(String s1, String s2, double dist, double sim) {
-			this.s1 = s1;
-			this.s2 = s2;
-			this.dist = dist;
-			this.sim = sim;
-		}
-	}
+    public TestInput(String s1, String s2, double dist, double sim) {
+      this.s1 = s1;
+      this.s2 = s2;
+      this.dist = dist;
+      this.sim = sim;
+    }
+  }
 
-	private class DistanceMetricTest extends AbstractDistanceMetricTest {
-		private TestInput[] testInput;
+  private class DistanceMetricTest extends AbstractDistanceMetricTest {
 
-		public DistanceMetricTest(AbstractDistanceAndSimilarityMetricTest.TestInput[] input) {
-			testInput = new TestInput[input.length];
+    private TestInput[] testInput;
 
-			for (int i=0; i<input.length; i++)
-				testInput[i] = new TestInput(input[i].s1, input[i].s2, input[i].dist);
-		}
+    public DistanceMetricTest(AbstractDistanceAndSimilarityMetricTest.TestInput[] input) {
+      testInput = new TestInput[input.length];
 
-		@Override
-		protected TestInput[] getTestInput() {
-			return testInput;
-		}
+      for (int i = 0; i < input.length; i++) {
+        testInput[i] = new TestInput(input[i].s1, input[i].s2, input[i].dist);
+      }
+    }
 
-		@Override
-		protected DistanceMetric getDistanceMetric() {
-			return AbstractDistanceAndSimilarityMetricTest.this.getDistanceMetric();
-		}
+    @Override
+    protected TestInput[] getTestInput() {
+      return testInput;
+    }
 
-	}
+    @Override
+    protected DistanceMetric getDistanceMetric() {
+      return AbstractDistanceAndSimilarityMetricTest.this.getDistanceMetric();
+    }
 
-	private class SimilarityMetricTest extends AbstractSimilarityMetricTest {
-		private TestInput[] testInput;
+  }
 
-		public SimilarityMetricTest(AbstractDistanceAndSimilarityMetricTest.TestInput[] input) {
-			testInput = new TestInput[input.length];
+  private class SimilarityMetricTest extends AbstractSimilarityMetricTest {
 
-			for (int i=0; i<input.length; i++)
-				testInput[i] = new TestInput(input[i].s1, input[i].s2, input[i].sim);
-		}
+    private TestInput[] testInput;
 
-		@Override
-		protected TestInput[] getTestInput() {
-			return testInput;
-		}
+    public SimilarityMetricTest(AbstractDistanceAndSimilarityMetricTest.TestInput[] input) {
+      testInput = new TestInput[input.length];
 
-		@Override
-		protected SimilarityMetric getSimilarityMetric() {
-			return AbstractDistanceAndSimilarityMetricTest.this.getSimilarityMetric();
-		}
+      for (int i = 0; i < input.length; i++) {
+        testInput[i] = new TestInput(input[i].s1, input[i].s2, input[i].sim);
+      }
+    }
 
-	}
+    @Override
+    protected TestInput[] getTestInput() {
+      return testInput;
+    }
+
+    @Override
+    protected SimilarityMetric getSimilarityMetric() {
+      return AbstractDistanceAndSimilarityMetricTest.this.getSimilarityMetric();
+    }
+
+  }
 }

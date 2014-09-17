@@ -15,48 +15,45 @@
 package ch.ethz.student.dejavu.utilities;
 
 public class Utilities {
-	
-	public static final double DISTANCE_EMPTY_EMPTY = 0.0;
-	public static final double SIMILARITY_EMPTY_EMPTY = 1.0;
-	
-	static public boolean checkInputs(String s1, String s2) {
-		if (s1 == null || s2 == null)
-			throw new IllegalArgumentException("Input strings cannot be null!");
-		
-		return !(s1.isEmpty() && s2.isEmpty());
-	}
-	
-	static public double min(double ...ds )
-	{
-		if (ds.length < 2)
-			throw new IllegalArgumentException("Input values cannot be fewer than 2");
-		
-		double min_value = ds[0];
-		for (int i = 1; i < ds.length; i++)
-		{
-			if (ds[i] < min_value)
-			{
-				min_value = ds[i];
-			}
-		}
-		return min_value;
-	}
-	
-	static public double max(double ...ds )
-	{
-		if (ds.length < 2)
-			throw new IllegalArgumentException("Input values cannot be fewer than 2");
-		
-		double max_value = ds[0];
-		for (int i = 1; i < ds.length; i++)
-		{
-			if (ds[i] > max_value)
-			{
-				max_value = ds[i];
-			}
-		}
-		return max_value;
-	}
+
+  public static final double DISTANCE_EMPTY_EMPTY = 0.0;
+  public static final double SIMILARITY_EMPTY_EMPTY = 1.0;
+
+  static public boolean checkInputs(String s1, String s2) {
+    if (s1 == null || s2 == null) {
+      throw new IllegalArgumentException("Input strings cannot be null!");
+    }
+
+    return !(s1.isEmpty() && s2.isEmpty());
+  }
+
+  static public double min(double... ds) {
+    if (ds.length < 2) {
+      throw new IllegalArgumentException("Input values cannot be fewer than 2");
+    }
+
+    double min_value = ds[0];
+    for (int i = 1; i < ds.length; i++) {
+      if (ds[i] < min_value) {
+        min_value = ds[i];
+      }
+    }
+    return min_value;
+  }
+
+  static public double max(double... ds) {
+    if (ds.length < 2) {
+      throw new IllegalArgumentException("Input values cannot be fewer than 2");
+    }
+
+    double max_value = ds[0];
+    for (int i = 1; i < ds.length; i++) {
+      if (ds[i] > max_value) {
+        max_value = ds[i];
+      }
+    }
+    return max_value;
+  }
 
 }
 

@@ -14,26 +14,26 @@
 */
 package ch.ethz.student.dejavu.tokenizer;
 
-public class CharTokenizer extends Tokenizer{
+public class CharTokenizer extends Tokenizer {
 
-	public CharTokenizer() {
-		super();
-	}
-	
-	public CharTokenizer(String s) {
-		super(s);
-	}
+  public CharTokenizer() {
+    super();
+  }
 
-	@Override
-	public boolean hasMoreTokens() {
-		return currentPosition < s.length();
-	}
+  public CharTokenizer(String s) {
+    super(s);
+  }
 
-	@Override
-	public Character nextToken() {
-		Character c = s.charAt(currentPosition);
-		currentPosition++;
-		return c;
-	}
+  @Override
+  public boolean hasMoreTokens() {
+    return currentPosition < s.length();
+  }
+
+  @Override
+  public Character nextToken() {
+    Character c = s.charAt(currentPosition);
+    currentPosition++;
+    return c;
+  }
 
 }

@@ -16,33 +16,33 @@ package ch.ethz.student.dejavu.tokenizer;
 
 import java.util.StringTokenizer;
 
-public class SeparatorTokenizer extends Tokenizer{
+public class SeparatorTokenizer extends Tokenizer {
 
-	private StringTokenizer sTokenizer;
-	private String delim;
-	
-	public SeparatorTokenizer(String delim) {
-		this.delim = delim;
-	}
-	
-	public SeparatorTokenizer(String s, String delim) {
-		this.delim = delim;
-		this.sTokenizer = new StringTokenizer(s, delim);
-	}
-	
-	@Override
-	public boolean hasMoreTokens() {
-		return sTokenizer.hasMoreTokens();
-	}
+  private StringTokenizer sTokenizer;
+  private String delim;
 
-	@Override
-	public String nextToken() {
-		return sTokenizer.nextToken();
-	}
-	
-	@Override
-	public void reset(String s) {
-		this.sTokenizer = new StringTokenizer(s, delim);
-	}
+  public SeparatorTokenizer(String delim) {
+    this.delim = delim;
+  }
+
+  public SeparatorTokenizer(String s, String delim) {
+    this.delim = delim;
+    this.sTokenizer = new StringTokenizer(s, delim);
+  }
+
+  @Override
+  public boolean hasMoreTokens() {
+    return sTokenizer.hasMoreTokens();
+  }
+
+  @Override
+  public String nextToken() {
+    return sTokenizer.nextToken();
+  }
+
+  @Override
+  public void reset(String s) {
+    this.sTokenizer = new StringTokenizer(s, delim);
+  }
 
 }

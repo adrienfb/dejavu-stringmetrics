@@ -18,101 +18,98 @@ import ch.ethz.student.dejavu.SimilarityMetric;
 import ch.ethz.student.dejavu.utilities.Utilities;
 
 
-
-
 /**
- * Jaccard distance implementation based on a vector model. 
- * This implementation uses the formula: jaccardCoefficient = intersection (A, B) / union (A, B)
- * Where A and B are Sets of Tokens, thus no duplicate entries.
- * 
- * For creation please use default JaccardDistance or the Builder {@link Builder}.
- * 
- * <p>Wikipedia: <a href="http://en.wikipedia.org/wiki/Jaccard_similarity">http://en.wikipedia.org/wiki/Jaccard_similarity</a></p>
- * 
- * @author Florian Froese
- * @see     VectorSimilarity
- * @since   1.0
+ * Jaccard distance implementation based on a vector model. This implementation uses the formula:
+ * jaccardCoefficient = intersection (A, B) / union (A, B) Where A and B are Sets of Tokens, thus no
+ * duplicate entries.
  *
+ * For creation please use default JaccardDistance or the Builder {@link Builder}.
+ *
+ * <p>Wikipedia: <a href="http://en.wikipedia.org/wiki/Jaccard_similarity">http://en.wikipedia.org/wiki/Jaccard_similarity</a></p>
+ *
+ * @author Florian Froese
+ * @see VectorSimilarity
+ * @since 1.0
  */
-public class JaccardSimilarity extends VectorSimilarity implements SimilarityMetric{
+public class JaccardSimilarity extends VectorSimilarity implements SimilarityMetric {
 
-	private JaccardSimilarity(Builder builder) {
-		super(builder);
-	}
-	
-	@Override
-	public double computeSimilarity(String s1, String s2) {
-		if (!Utilities.checkInputs(s1, s2))
-			return Utilities.SIMILARITY_EMPTY_EMPTY;
-		
-		computeTokens(s1, s2);
-		
-		if (s1.length() == 0 && s2.length() == 0) {
-			return 1.0;
-		}
-		
-		double u = 0.0;
-		double i = 0.0;
-		
-		if (takeKeyset) {
-			u = VectorUtils.union(keys1, keys2);
-			i = VectorUtils.intersect(keys1, keys2);
-		} else {
-			u = VectorUtils.union(vec1, vec2);
-			i = VectorUtils.intersect(vec1, vec2);
-		}
-		
-		double jaccardDistance = i / u;	// Jaccard Coefficient
-		
+  private JaccardSimilarity(Builder builder) {
+    super(builder);
+  }
+
+  @Override
+  public double computeSimilarity(String s1, String s2) {
+    if (!Utilities.checkInputs(s1, s2)) {
+      return Utilities.SIMILARITY_EMPTY_EMPTY;
+    }
+
+    computeTokens(s1, s2);
+
+    if (s1.length() == 0 && s2.length() == 0) {
+      return 1.0;
+    }
+
+    double u = 0.0;
+    double i = 0.0;
+
+    if (takeKeyset) {
+      u = VectorUtils.union(keys1, keys2);
+      i = VectorUtils.intersect(keys1, keys2);
+    } else {
+      u = VectorUtils.union(vec1, vec2);
+      i = VectorUtils.intersect(vec1, vec2);
+    }
+
+    double jaccardDistance = i / u;        // Jaccard Coefficient
+
 //		double jaccardDistance = ( u - i ) / u;
-		
-		return jaccardDistance;
-	}
-	
-	// ===== Builder Pattern Methods =====
 
-	/**
-	 * @return	{@link Builder}
-	 * @see Builder
-	 * @see JaccardSimilarity
-	 */
-	public static Builder getBuilder() {
-		return new Builder();
-	}
+    return jaccardDistance;
+  }
 
-	/**
-	 * @return	standard jaccard coefficient that can be used to determine the jaccard coefficient of two strings.
-	 * @see JaccardSimilarity
-	 */
-	public static JaccardSimilarity getInstance() {
-		return new Builder().build();
-	}
+  // ===== Builder Pattern Methods =====
 
-	// ===== Builder Class =====
+  /**
+   * @return        {@link Builder}
+   * @see Builder
+   * @see JaccardSimilarity
+   */
+  public static Builder getBuilder() {
+    return new Builder();
+  }
 
-	/**
-	 * JaccardDistance Builder
-	 * No further restrictions or additional parameters.
-	 * 
-	 * <p>For configuration and usage refer to {@link VectorBuilder}</p>
-	 * 
-	 * @author Adrien Favre-Bully
-	 * @author Florian Froese
-	 * @author Adrian Schmidmeister
-	 * @see VectorBuilder
-	 * @since 1.0
-	 */
-	public static class Builder extends VectorBuilder<Builder>{
+  /**
+   * @return standard jaccard coefficient that can be used to determine the jaccard coefficient of
+   * two strings.
+   * @see JaccardSimilarity
+   */
+  public static JaccardSimilarity getInstance() {
+    return new Builder().build();
+  }
 
-		public JaccardSimilarity build() {
-			// check constraints
+  // ===== Builder Class =====
 
+  /**
+   * JaccardDistance Builder No further restrictions or additional parameters.
+   *
+   * <p>For configuration and usage refer to {@link VectorBuilder}</p>
+   *
+   * @author Adrien Favre-Bully
+   * @author Florian Froese
+   * @author Adrian Schmidmeister
+   * @see VectorBuilder
+   * @since 1.0
+   */
+  public static class Builder extends VectorBuilder<Builder> {
 
-			// build object
-			JaccardSimilarity d = new JaccardSimilarity(this);
+    public JaccardSimilarity build() {
+      // check constraints
 
-			return d;
-		}
-		
-	}
+      // build object
+      JaccardSimilarity d = new JaccardSimilarity(this);
+
+      return d;
+    }
+
+  }
 }

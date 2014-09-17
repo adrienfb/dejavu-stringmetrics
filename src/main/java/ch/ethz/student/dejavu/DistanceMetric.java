@@ -17,6 +17,6 @@ package ch.ethz.student.dejavu;
 
 public interface DistanceMetric {
 
-	public double computeDistance(String s1, String s2);
-	
+  public double computeDistance(String s1, String s2);
+
 }

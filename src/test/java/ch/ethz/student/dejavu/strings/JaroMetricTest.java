@@ -18,23 +18,24 @@ import ch.ethz.student.dejavu.AbstractSimilarityMetricTest;
 import ch.ethz.student.dejavu.SimilarityMetric;
 
 public class JaroMetricTest extends AbstractSimilarityMetricTest {
-	private static final JaroMetric metric = JaroMetric.getInstance();
-	private static final TestInput[] testInput = {
-		new TestInput("MARTHA", "MARHTA", 0.9444),
-		new TestInput("DWAYNE", "DUANE", 0.8222),
-		new TestInput("DIXON", "DICKSONX", 0.7666),
-		new TestInput("jones", "johnson", 0.7904),
-		new TestInput("fvie", "ten", 0.0),
-	};
-	
-	@Override
-	protected TestInput[] getTestInput() {
-		return testInput;
-	}
 
-	@Override
-	protected SimilarityMetric getSimilarityMetric() {
-		return metric;
-	}	
-	
+  private static final JaroMetric metric = JaroMetric.getInstance();
+  private static final TestInput[] testInput = {
+      new TestInput("MARTHA", "MARHTA", 0.9444),
+      new TestInput("DWAYNE", "DUANE", 0.8222),
+      new TestInput("DIXON", "DICKSONX", 0.7666),
+      new TestInput("jones", "johnson", 0.7904),
+      new TestInput("fvie", "ten", 0.0),
+  };
+
+  @Override
+  protected TestInput[] getTestInput() {
+    return testInput;
+  }
+
+  @Override
+  protected SimilarityMetric getSimilarityMetric() {
+    return metric;
+  }
+
 }
