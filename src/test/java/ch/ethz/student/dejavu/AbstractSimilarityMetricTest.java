@@ -22,6 +22,7 @@ public abstract class AbstractSimilarityMetricTest extends TestCase {
 
   private static final double DELTA = 0.0001;
   private static final double SIMILARITY_EMPTY_EMPTY = 1.0;
+  private static final double SIMILARITY_EMPTY_ANY = 0.0;
 
   // ===== Metric Specific =====
 
@@ -63,9 +64,8 @@ public abstract class AbstractSimilarityMetricTest extends TestCase {
     String s1 = "any string";
     String s2 = "";
 
-    getSimilarityMetric().computeSimilarity(s1, s2);
-
-    getSimilarityMetric().computeSimilarity(s2, s1);
+    assertEquals(SIMILARITY_EMPTY_ANY, getSimilarityMetric().computeSimilarity(s1, s2));
+    assertEquals(SIMILARITY_EMPTY_ANY, getSimilarityMetric().computeSimilarity(s2, s1));
 
     double dist = getSimilarityMetric().computeSimilarity(s2, s2);
     assertEquals(SIMILARITY_EMPTY_EMPTY, dist);
