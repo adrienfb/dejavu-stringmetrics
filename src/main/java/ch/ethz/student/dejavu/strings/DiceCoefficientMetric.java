@@ -76,9 +76,9 @@ public class DiceCoefficientMetric implements SimilarityMetric {
   private static final Set<Bigram> extractBigrams(String s) {
     int length = s.length();
 
-    // empty string case
-    if (length == 0) {
-      return new HashSet<Bigram>(0);
+    // too short string case
+    if (length < 2) {
+      throw new IllegalArgumentException("cannot extract bigrams for string with length < 2 : '"+s+"'");
     }
     // normal case
     else {

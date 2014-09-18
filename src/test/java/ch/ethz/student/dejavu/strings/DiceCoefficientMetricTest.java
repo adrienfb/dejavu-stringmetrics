@@ -16,6 +16,7 @@ package ch.ethz.student.dejavu.strings;
 
 import ch.ethz.student.dejavu.AbstractSimilarityMetricTest;
 import ch.ethz.student.dejavu.SimilarityMetric;
+import ch.ethz.student.dejavu.TestUtils;
 
 public class DiceCoefficientMetricTest extends AbstractSimilarityMetricTest {
 
@@ -35,6 +36,32 @@ public class DiceCoefficientMetricTest extends AbstractSimilarityMetricTest {
   @Override
   protected SimilarityMetric getSimilarityMetric() {
     return metric;
+  }
+  
+  @Override
+  protected String getValidRandomString() {
+    return TestUtils.getRandomString(2, TestUtils.MAX_LEN);
+  }
+  
+  // ===== Special Test Cases =====
+  
+  @Override
+  public void testEmptyArguments() {
+    String s1 = "any string";
+    String s2 = "";
+    
+    try {
+      getSimilarityMetric().computeSimilarity(s1, s2);
+      fail("Empty string should trigger IllegalArgumentException");
+    } catch (IllegalArgumentException e) { /* all good */ }
+    
+    try {
+      getSimilarityMetric().computeSimilarity(s1, s2);
+      fail("Empty string should trigger IllegalArgumentException");
+    } catch (IllegalArgumentException e) { /* all good */ }
+    
+    double dist = getSimilarityMetric().computeSimilarity(s2, s2);
+    assertEquals(TestUtils.SIMILARITY_EMPTY_EMPTY, dist);
   }
 
 }

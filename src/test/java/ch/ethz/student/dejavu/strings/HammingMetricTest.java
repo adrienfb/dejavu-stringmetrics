@@ -14,13 +14,17 @@
 */
 package ch.ethz.student.dejavu.strings;
 
+import java.util.Random;
+
 import ch.ethz.student.dejavu.AbstractDistanceAndSimilarityMetricTest;
 import ch.ethz.student.dejavu.DistanceMetric;
 import ch.ethz.student.dejavu.SimilarityMetric;
+import ch.ethz.student.dejavu.TestUtils;
 import ch.ethz.student.dejavu.utilities.Utilities;
 
 public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
-
+  private static final Random rnd = new Random();
+  
   private static final HammingMetric metric = HammingMetric.getInstance();
   private static final TestInput[] testInput = {
       new TestInput("Hello world!", "Hello mamma!", 5, 0.5833),
@@ -42,7 +46,7 @@ public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
   protected SimilarityMetric getSimilarityMetric() {
     return metric;
   }
-
+  
   // ===== Equal Length Constraints =====
 
   public void testEqualLenghtConstraints() {
@@ -68,4 +72,92 @@ public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
     assertEquals(Utilities.SIMILARITY_EMPTY_EMPTY, dist);
   }
 
+  @Override
+  public void testDistanceCommutativity() {
+    // run test on manually specified test input
+    for (TestInput ti : getTestInput()) {
+      double dist1 = getDistanceMetric().computeDistance(ti.s1, ti.s2);
+      double dist2 = getDistanceMetric().computeDistance(ti.s2, ti.s1);
+
+      assertEquals("Commutativity Test failed on strings " + ti.s1 + " and " + ti.s2, dist1, dist2);
+    }
+    
+    // run test on randomly generated strings
+    for (int i = 0; i < TestUtils.N; i++) {
+      int length = rnd.nextInt(TestUtils.MAX_LEN+1-TestUtils.MIN_LEN) + TestUtils.MIN_LEN;
+      String s1 = TestUtils.getRandomString(length);
+      String s2 = TestUtils.getRandomString(length);
+
+      double dist1 = getDistanceMetric().computeDistance(s1, s2);
+      double dist2 = getDistanceMetric().computeDistance(s2, s1);
+      assertEquals(dist1, dist2);
+    }
+  }
+  
+  @Override
+  public void testSimilarityCommutativity() {
+    // run test on manually specified test input
+    for (TestInput ti : getTestInput()) {
+      double dist1 = getDistanceMetric().computeDistance(ti.s1, ti.s2);
+      double dist2 = getDistanceMetric().computeDistance(ti.s2, ti.s1);
+
+      assertEquals("Commutativity Test failed on strings " + ti.s1 + " and " + ti.s2, dist1, dist2);
+    }
+    
+    // run test on randomly generated strings
+    for (int i = 0; i < TestUtils.N; i++) {
+      int length = rnd.nextInt(TestUtils.MAX_LEN+1-TestUtils.MIN_LEN) + TestUtils.MIN_LEN;
+      String s1 = TestUtils.getRandomString(length);
+      String s2 = TestUtils.getRandomString(length);
+
+      double dist1 = getDistanceMetric().computeDistance(s1, s2);
+      double dist2 = getDistanceMetric().computeDistance(s2, s1);
+      assertEquals(dist1, dist2);
+    }
+  }
+  
+  @Override
+  public void testSimilarityBounds() {
+    for (int i = 0; i < TestUtils.N; i++) {
+      int length = rnd.nextInt(TestUtils.MAX_LEN+1-TestUtils.MIN_LEN) + TestUtils.MIN_LEN;
+      String s1 = TestUtils.getRandomString(length);
+      String s2 = TestUtils.getRandomString(length);
+      double s = getSimilarityMetric().computeSimilarity(s1, s2);
+
+      assertTrue(
+          "Similarity s=" + s + " not in bounds [0,1] for input s1='" + s1 + "' and s2='" + s2
+          + "'", s >= 0 && s <= 1);
+    }
+  }
+  
+  @Override
+  public void testDistanceRobustness() {
+    for (int i = 0; i < TestUtils.N; i++) {
+      int length = rnd.nextInt(TestUtils.MAX_LEN+1-TestUtils.MIN_LEN) + TestUtils.MIN_LEN;
+      String s1 = TestUtils.getRandomString(length);
+      String s2 = TestUtils.getRandomString(length);
+
+      try {
+        getDistanceMetric().computeDistance(s1, s2);
+      } catch (Exception e) {
+        fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
+      }
+    }
+  }
+  
+  @Override
+  public void testSimilarityRobustness() {
+    for (int i = 0; i < TestUtils.N; i++) {
+      int length = rnd.nextInt(TestUtils.MAX_LEN+1-TestUtils.MIN_LEN) + TestUtils.MIN_LEN;
+      String s1 = TestUtils.getRandomString(length);
+      String s2 = TestUtils.getRandomString(length);
+
+      try {
+        getDistanceMetric().computeDistance(s1, s2);
+      } catch (Exception e) {
+        fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
+      }
+    }
+  }
+  
 }

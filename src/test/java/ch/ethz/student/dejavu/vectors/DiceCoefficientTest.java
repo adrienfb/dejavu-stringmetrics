@@ -2,6 +2,7 @@ package ch.ethz.student.dejavu.vectors;
 
 import ch.ethz.student.dejavu.AbstractSimilarityMetricTest;
 import ch.ethz.student.dejavu.SimilarityMetric;
+import ch.ethz.student.dejavu.TestUtils;
 import ch.ethz.student.dejavu.strings.DiceCoefficientMetric;
 
 public class DiceCoefficientTest extends AbstractSimilarityMetricTest {
@@ -26,6 +27,33 @@ public class DiceCoefficientTest extends AbstractSimilarityMetricTest {
     return metric;
   }
 
+  @Override
+  protected String getValidRandomString() {
+    return TestUtils.getRandomString(1, TestUtils.MAX_LEN);
+  }
+  
+  // ===== Special Test Cases =====
+
+  @Override
+  public void testEmptyArguments() {
+    String s1 = "any string";
+    String s2 = "";
+
+    try {
+      getSimilarityMetric().computeSimilarity(s1, s2);
+      fail("Empty string should trigger IllegalArgumentException");
+    } catch (IllegalArgumentException e) { /* all good */ }
+
+    try {
+      getSimilarityMetric().computeSimilarity(s1, s2);
+      fail("Empty string should trigger IllegalArgumentException");
+    } catch (IllegalArgumentException e) { /* all good */ }
+
+    double dist = getSimilarityMetric().computeSimilarity(s2, s2);
+    assertEquals(TestUtils.SIMILARITY_EMPTY_EMPTY, dist);
+  }
+  
+  // TODO: finish this test!
   public void testTokenizer() {
     DiceCoefficient.Builder builder = DiceCoefficient.getBuilder();
     builder.nGram(2);

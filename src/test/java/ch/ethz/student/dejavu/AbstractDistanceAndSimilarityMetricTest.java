@@ -16,10 +16,6 @@ package ch.ethz.student.dejavu;
 
 import junit.framework.TestCase;
 
-import java.util.Random;
-
-import ch.ethz.student.dejavu.strings.HammingMetric;
-
 public abstract class AbstractDistanceAndSimilarityMetricTest extends TestCase {
 
   private DistanceMetricTest distanceMetricTest;
@@ -34,6 +30,10 @@ public abstract class AbstractDistanceAndSimilarityMetricTest extends TestCase {
 
   // ===== Metric Specific =====
 
+  protected String getValidRandomString() {
+    return TestUtils.getRandomString();
+  }
+  
   protected abstract TestInput[] getTestInput();
 
   protected abstract DistanceMetric getDistanceMetric();
@@ -61,6 +61,10 @@ public abstract class AbstractDistanceAndSimilarityMetricTest extends TestCase {
   public void testDistance() {
     distanceMetricTest.testDistance();
   }
+  
+  public void testDistanceRobustness() {
+    distanceMetricTest.testRobustness();
+  }
 
   // ===== Similarity Metric Tests =====
 
@@ -85,65 +89,11 @@ public abstract class AbstractDistanceAndSimilarityMetricTest extends TestCase {
   }
 
   public void testSimilarityBounds() {
-    if (getSimilarityMetric() instanceof HammingMetric) {
-      for (int i = 0; i < TestUtils.N; i++) {
-        String s1 = TestUtils.getRandomString(TestUtils.MAX_LEN + 1);
-        String s2 = TestUtils.getRandomString(TestUtils.MAX_LEN + 1);
-        double s = getSimilarityMetric().computeSimilarity(s1, s2);
-
-        assertTrue(
-            "Similarity s=" + s + " not in bounds [0,1] for input s1='" + s1 + "' and s2='" + s2
-            + "'", s >= 0 && s <= 1);
-      }
-    } else {
-      Random rand = new Random();
-
-      for (int i = 0; i < TestUtils.N; i++) {
-        String
-            s1 =
-            TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
-        String
-            s2 =
-            TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
-        double s = getSimilarityMetric().computeSimilarity(s1, s2);
-
-        assertTrue(
-            "Similarity s=" + s + " not in bounds [0,1] for input s1='" + s1 + "' and s2='" + s2
-            + "'", s >= 0 && s <= 1);
-      }
-    }
+    similarityMetricTest.testSimilarityBounds();
   }
 
-  public void testRobustness() {
-    if (getSimilarityMetric() instanceof HammingMetric) {
-      for (int i = 0; i < TestUtils.N; i++) {
-        String s1 = TestUtils.getRandomString(TestUtils.MAX_LEN + 1);
-        String s2 = TestUtils.getRandomString(TestUtils.MAX_LEN + 1);
-
-        try {
-          getSimilarityMetric().computeSimilarity(s1, s2);
-        } catch (Exception e) {
-          fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
-        }
-      }
-    } else {
-      Random rand = new Random();
-
-      for (int i = 0; i < TestUtils.N; i++) {
-        String
-            s1 =
-            TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
-        String
-            s2 =
-            TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
-
-        try {
-          getSimilarityMetric().computeSimilarity(s1, s2);
-        } catch (Exception e) {
-          fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
-        }
-      }
-    }
+  public void testSimilarityRobustness() {
+    similarityMetricTest.testRobustness();
   }
 
   // ===== Helper Classes =====

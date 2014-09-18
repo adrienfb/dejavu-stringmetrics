@@ -44,7 +44,7 @@ public class JaroMetric implements SimilarityMetric {
       return Utilities.SIMILARITY_EMPTY_EMPTY;
     }
 
-    int window = Math.max(s1.length(), s2.length()) / 2 - 1;
+    int window = Math.max(Math.max(s1.length(), s2.length()) / 2 - 1, 0);
     StringBuilder matchings12 = getMatchings(s1, s2, window);
     StringBuilder matchings21 = getMatchings(s2, s1, window);
 

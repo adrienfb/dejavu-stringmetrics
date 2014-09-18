@@ -4,11 +4,12 @@ import junit.framework.TestCase;
 
 public abstract class AbstractUnnormalizedSimilarityTest extends TestCase {
 
-  private static final double DELTA = 0.0001;
-  private static final double SIMILARITY_EMPTY_EMPTY = 1.0;
-
   // ===== Metric Specific =====
 
+  protected String getValidRandomString() {
+    return TestUtils.getRandomString();
+  }
+  
   protected abstract TestInput[] getTestInput();
 
   protected abstract UnnormalizedSimilarityMetric getSimilarityMetric();
@@ -47,19 +48,32 @@ public abstract class AbstractUnnormalizedSimilarityTest extends TestCase {
     String s1 = "any string";
     String s2 = "";
 
-    getSimilarityMetric().computeUnnormalizedSimilarity(s1, s2);
-
-    getSimilarityMetric().computeUnnormalizedSimilarity(s2, s1);
-
-    double dist = getSimilarityMetric().computeUnnormalizedSimilarity(s2, s2);
-    assertEquals(SIMILARITY_EMPTY_EMPTY, dist);
+    double sim = getSimilarityMetric().computeUnnormalizedSimilarity(s1, s2);
+    assertEquals(TestUtils.SIMILARITY_EMPTY_ANY, sim);
+    
+    sim = getSimilarityMetric().computeUnnormalizedSimilarity(s2, s1);
+    assertEquals(TestUtils.SIMILARITY_EMPTY_ANY, sim);
+    
+    sim = getSimilarityMetric().computeUnnormalizedSimilarity(s2, s2);
+    assertEquals(TestUtils.SIMILARITY_EMPTY_EMPTY, sim);
   }
 
   public void testCommutativity() {
+    // run test on manually specified test input
     for (TestInput ti : getTestInput()) {
       double dist1 = getSimilarityMetric().computeUnnormalizedSimilarity(ti.s1, ti.s2);
       double dist2 = getSimilarityMetric().computeUnnormalizedSimilarity(ti.s2, ti.s1);
 
+      assertEquals(dist1, dist2);
+    }
+    
+    // run test on randomly generated strings
+    for (int i = 0; i < TestUtils.N; i++) {
+      String s1 = getValidRandomString();
+      String s2 = getValidRandomString();
+
+      double dist1 = getSimilarityMetric().computeUnnormalizedSimilarity(s1, s2);
+      double dist2 = getSimilarityMetric().computeUnnormalizedSimilarity(s2, s1);
       assertEquals(dist1, dist2);
     }
   }
@@ -68,7 +82,20 @@ public abstract class AbstractUnnormalizedSimilarityTest extends TestCase {
     for (TestInput ti : getTestInput()) {
       double sim = getSimilarityMetric().computeUnnormalizedSimilarity(ti.s1, ti.s2);
 
-      assertEquals("Input: '" + ti.s1 + "'  and '" + ti.s2 + "'", ti.sim, sim, DELTA);
+      assertEquals("Input: '" + ti.s1 + "'  and '" + ti.s2 + "'", ti.sim, sim, TestUtils.DELTA);
+    }
+  }
+  
+  public void testRobustness() {
+    for (int i = 0; i < TestUtils.N; i++) {
+      String s1 = getValidRandomString();
+      String s2 = getValidRandomString();
+
+      try {
+        getSimilarityMetric().computeUnnormalizedSimilarity(s1, s2);
+      } catch (Exception e) {
+        fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
+      }
     }
   }
 

@@ -16,16 +16,14 @@ package ch.ethz.student.dejavu;
 
 import junit.framework.TestCase;
 
-import java.util.Random;
-
 public abstract class AbstractSimilarityMetricTest extends TestCase {
-
-  private static final double DELTA = 0.0001;
-  private static final double SIMILARITY_EMPTY_EMPTY = 1.0;
-  private static final double SIMILARITY_EMPTY_ANY = 0.0;
 
   // ===== Metric Specific =====
 
+  protected String getValidRandomString() {
+    return TestUtils.getRandomString();
+  }
+  
   protected abstract TestInput[] getTestInput();
 
   protected abstract SimilarityMetric getSimilarityMetric();
@@ -64,29 +62,49 @@ public abstract class AbstractSimilarityMetricTest extends TestCase {
     String s1 = "any string";
     String s2 = "";
 
-    assertEquals(SIMILARITY_EMPTY_ANY, getSimilarityMetric().computeSimilarity(s1, s2));
-    assertEquals(SIMILARITY_EMPTY_ANY, getSimilarityMetric().computeSimilarity(s2, s1));
+    assertEquals(TestUtils.SIMILARITY_EMPTY_ANY, getSimilarityMetric().computeSimilarity(s1, s2));
+    assertEquals(TestUtils.SIMILARITY_EMPTY_ANY, getSimilarityMetric().computeSimilarity(s2, s1));
 
     double dist = getSimilarityMetric().computeSimilarity(s2, s2);
-    assertEquals(SIMILARITY_EMPTY_EMPTY, dist);
+    assertEquals(TestUtils.SIMILARITY_EMPTY_EMPTY, dist);
   }
 
   public void testCommutativity() {
+    // run test on manually specified test input
     for (TestInput ti : getTestInput()) {
       double dist1 = getSimilarityMetric().computeSimilarity(ti.s1, ti.s2);
       double dist2 = getSimilarityMetric().computeSimilarity(ti.s2, ti.s1);
 
       assertEquals(dist1, dist2);
     }
+    
+    // run test on randomly generated strings
+    for (int i = 0; i < TestUtils.N; i++) {
+      String s1 = getValidRandomString();
+      String s2 = getValidRandomString();
+
+      double dist1 = getSimilarityMetric().computeSimilarity(s1, s2);
+      double dist2 = getSimilarityMetric().computeSimilarity(s2, s1);
+      assertEquals(dist1, dist2);
+    }
   }
 
   public void testSimilarityToSelf() {
+    // run test on manually specified test input
     for (TestInput ti : getTestInput()) {
       double dist1 = getSimilarityMetric().computeSimilarity(ti.s1, ti.s1);
       double dist2 = getSimilarityMetric().computeSimilarity(ti.s2, ti.s2);
 
-      assertEquals(1.0, dist1);
-      assertEquals(1.0, dist2);
+      assertEquals(TestUtils.SIMILARITY_SELF, dist1);
+      assertEquals(TestUtils.SIMILARITY_SELF, dist2);
+    }
+    
+    // run test on randomly generated strings
+    for (int i = 0; i < TestUtils.N; i++) {
+      String s1 = getValidRandomString();
+
+      double dist = getSimilarityMetric().computeSimilarity(s1, s1);
+      assertEquals("'"+s1+"'", TestUtils.SIMILARITY_SELF, dist);
     }
   }
 
@@ -94,20 +112,14 @@ public abstract class AbstractSimilarityMetricTest extends TestCase {
     for (TestInput ti : getTestInput()) {
       double sim = getSimilarityMetric().computeSimilarity(ti.s1, ti.s2);
 
-      assertEquals("Input: '" + ti.s1 + "'  and '" + ti.s2 + "'", ti.sim, sim, DELTA);
+      assertEquals("Input: '" + ti.s1 + "'  and '" + ti.s2 + "'", ti.sim, sim, TestUtils.DELTA);
     }
   }
 
   public void testSimilarityBounds() {
-    Random rand = new Random();
-
     for (int i = 0; i < TestUtils.N; i++) {
-      String
-          s1 =
-          TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
-      String
-          s2 =
-          TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
+      String s1 = getValidRandomString();
+      String s2 = getValidRandomString();
       double s = getSimilarityMetric().computeSimilarity(s1, s2);
 
       assertTrue(
@@ -117,15 +129,9 @@ public abstract class AbstractSimilarityMetricTest extends TestCase {
   }
 
   public void testRobustness() {
-    Random rand = new Random();
-
     for (int i = 0; i < TestUtils.N; i++) {
-      String
-          s1 =
-          TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
-      String
-          s2 =
-          TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
+      String s1 = getValidRandomString();
+      String s2 = getValidRandomString();
 
       try {
         getSimilarityMetric().computeSimilarity(s1, s2);

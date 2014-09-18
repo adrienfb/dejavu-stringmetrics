@@ -16,14 +16,13 @@ package ch.ethz.student.dejavu;
 
 import junit.framework.TestCase;
 
-import java.util.Random;
-
 public abstract class AbstractDistanceMetricTest extends TestCase {
 
-  public static final double DELTA = 0.0001;
-  public static final double DISTANCE_EMPTY_EMPTY = 0.0;
-
   // ===== Metric Specific =====
+  
+  protected String getValidRandomString() {
+    return TestUtils.getRandomString();
+  }
 
   protected abstract TestInput[] getTestInput();
 
@@ -64,23 +63,34 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
     String s2 = "";
 
     getDistanceMetric().computeDistance(s1, s2);
-
     getDistanceMetric().computeDistance(s2, s1);
 
     double dist = getDistanceMetric().computeDistance(s2, s2);
-    assertEquals(DISTANCE_EMPTY_EMPTY, dist);
+    assertEquals(TestUtils.DISTANCE_EMPTY_EMPTY, dist);
   }
 
   public void testCommutativity() {
+    // run test on manually specified test input
     for (TestInput ti : getTestInput()) {
       double dist1 = getDistanceMetric().computeDistance(ti.s1, ti.s2);
       double dist2 = getDistanceMetric().computeDistance(ti.s2, ti.s1);
 
       assertEquals("Commutativity Test failed on strings " + ti.s1 + " and " + ti.s2, dist1, dist2);
     }
+    
+    // run test on randomly generated strings
+    for (int i = 0; i < TestUtils.N; i++) {
+      String s1 = getValidRandomString();
+      String s2 = getValidRandomString();
+
+      double dist1 = getDistanceMetric().computeDistance(s1, s2);
+      double dist2 = getDistanceMetric().computeDistance(s2, s1);
+      assertEquals(dist1, dist2);
+    }
   }
 
   public void testDistanceToSelf() {
+    // run test on manually specified test input
     for (TestInput ti : getTestInput()) {
       double dist1 = getDistanceMetric().computeDistance(ti.s1, ti.s1);
       double dist2 = getDistanceMetric().computeDistance(ti.s2, ti.s2);
@@ -88,26 +98,28 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
       assertEquals("'" + ti.s1 + "'", 0.0, dist1);
       assertEquals("'" + ti.s2 + "'", 0.0, dist2);
     }
+    
+    // run test on randomly generated strings
+    for (int i = 0; i < TestUtils.N; i++) {
+      String s1 = getValidRandomString();
+
+      double dist = getDistanceMetric().computeDistance(s1, s1);
+      assertEquals("'"+s1+"'", TestUtils.DISTANCE_SELF, dist);
+    }
   }
 
   public void testDistance() {
     for (TestInput ti : getTestInput()) {
       double dist = getDistanceMetric().computeDistance(ti.s1, ti.s2);
 
-      assertEquals("Input: '" + ti.s1 + "'  and '" + ti.s2 + "'", ti.dist, dist, DELTA);
+      assertEquals("Input: '" + ti.s1 + "'  and '" + ti.s2 + "'", ti.dist, dist, TestUtils.DELTA);
     }
   }
 
   public void testRobustness() {
-    Random rand = new Random();
-
     for (int i = 0; i < TestUtils.N; i++) {
-      String
-          s1 =
-          TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
-      String
-          s2 =
-          TestUtils.getRandomString(rand.nextInt(TestUtils.MAX_LEN + 1) + TestUtils.MIN_LEN);
+      String s1 = getValidRandomString();
+      String s2 = getValidRandomString();
 
       try {
         getDistanceMetric().computeDistance(s1, s2);
