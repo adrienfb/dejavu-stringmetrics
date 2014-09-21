@@ -49,21 +49,14 @@ public class DiceCoefficientMetricTest extends AbstractSimilarityMetricTest {
   // ===== Special Test Cases =====
   
   @Override
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testEmptyArguments() {
     String s1 = "any string";
     String s2 = "";
     
-    try {
-      getSimilarityMetric().computeSimilarity(s1, s2);
-      Assert.fail("Empty string should trigger IllegalArgumentException");
-    } catch (IllegalArgumentException e) { /* all good */ }
-    
-    try {
-      getSimilarityMetric().computeSimilarity(s1, s2);
-      Assert.fail("Empty string should trigger IllegalArgumentException");
-    } catch (IllegalArgumentException e) { /* all good */ }
-    
+    getSimilarityMetric().computeSimilarity(s1, s2);
+    getSimilarityMetric().computeSimilarity(s1, s2);
+
     double dist = getSimilarityMetric().computeSimilarity(s2, s2);
     Assert.assertEquals(TestUtils.SIMILARITY_EMPTY_EMPTY, dist, TestUtils.DELTA);
   }
