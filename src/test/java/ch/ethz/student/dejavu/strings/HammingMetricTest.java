@@ -14,6 +14,9 @@
 */
 package ch.ethz.student.dejavu.strings;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.util.Random;
 
 import ch.ethz.student.dejavu.AbstractDistanceAndSimilarityMetricTest;
@@ -52,34 +55,37 @@ public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
   public void testEqualLenghtConstraints() {
     try {
       getDistanceMetric().computeDistance("some length", "other length");
-      fail();
+      Assert.fail();
     } catch (IllegalArgumentException e) {
       // success
     }
   }
 
   @Override
+  @Test
   public void testDistanceEmptyArguments() {
     double dist = getDistanceMetric().computeDistance("", "");
 
-    assertEquals(Utilities.DISTANCE_EMPTY_EMPTY, dist);
+    Assert.assertEquals(Utilities.DISTANCE_EMPTY_EMPTY, dist, TestUtils.DELTA);
   }
 
   @Override
+  @Test
   public void testSimilarityEmptyArguments() {
     double dist = getSimilarityMetric().computeSimilarity("", "");
 
-    assertEquals(Utilities.SIMILARITY_EMPTY_EMPTY, dist);
+    Assert.assertEquals(Utilities.SIMILARITY_EMPTY_EMPTY, dist, TestUtils.DELTA);
   }
 
   @Override
+  @Test
   public void testDistanceCommutativity() {
     // run test on manually specified test input
     for (TestInput ti : getTestInput()) {
       double dist1 = getDistanceMetric().computeDistance(ti.s1, ti.s2);
       double dist2 = getDistanceMetric().computeDistance(ti.s2, ti.s1);
 
-      assertEquals("Commutativity Test failed on strings " + ti.s1 + " and " + ti.s2, dist1, dist2);
+      Assert.assertEquals("Commutativity Test failed on strings " + ti.s1 + " and " + ti.s2, dist1, dist2, TestUtils.DELTA);
     }
     
     // run test on randomly generated strings
@@ -90,18 +96,19 @@ public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
 
       double dist1 = getDistanceMetric().computeDistance(s1, s2);
       double dist2 = getDistanceMetric().computeDistance(s2, s1);
-      assertEquals(dist1, dist2);
+      Assert.assertEquals(dist1, dist2, TestUtils.DELTA);
     }
   }
   
   @Override
+  @Test
   public void testSimilarityCommutativity() {
     // run test on manually specified test input
     for (TestInput ti : getTestInput()) {
       double dist1 = getDistanceMetric().computeDistance(ti.s1, ti.s2);
       double dist2 = getDistanceMetric().computeDistance(ti.s2, ti.s1);
 
-      assertEquals("Commutativity Test failed on strings " + ti.s1 + " and " + ti.s2, dist1, dist2);
+      Assert.assertEquals("Commutativity Test failed on strings " + ti.s1 + " and " + ti.s2, dist1, dist2, TestUtils.DELTA);
     }
     
     // run test on randomly generated strings
@@ -112,7 +119,7 @@ public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
 
       double dist1 = getDistanceMetric().computeDistance(s1, s2);
       double dist2 = getDistanceMetric().computeDistance(s2, s1);
-      assertEquals(dist1, dist2);
+      Assert.assertEquals(dist1, dist2, TestUtils.DELTA);
     }
   }
   
@@ -124,7 +131,7 @@ public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
       String s2 = TestUtils.getRandomString(length);
       double s = getSimilarityMetric().computeSimilarity(s1, s2);
 
-      assertTrue(
+      Assert.assertTrue(
           "Similarity s=" + s + " not in bounds [0,1] for input s1='" + s1 + "' and s2='" + s2
           + "'", s >= 0 && s <= 1);
     }
@@ -140,7 +147,7 @@ public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
       try {
         getDistanceMetric().computeDistance(s1, s2);
       } catch (Exception e) {
-        fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
+        Assert.fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
       }
     }
   }
@@ -155,7 +162,7 @@ public class HammingMetricTest extends AbstractDistanceAndSimilarityMetricTest {
       try {
         getDistanceMetric().computeDistance(s1, s2);
       } catch (Exception e) {
-        fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
+        Assert.fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
       }
     }
   }

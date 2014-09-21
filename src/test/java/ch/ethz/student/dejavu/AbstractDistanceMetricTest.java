@@ -14,9 +14,10 @@
 */
 package ch.ethz.student.dejavu;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
-public abstract class AbstractDistanceMetricTest extends TestCase {
+public abstract class AbstractDistanceMetricTest {
 
   // ===== Metric Specific =====
   
@@ -30,6 +31,7 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
 
   // ===== Distance Metric Tests =====
 
+  @Test
   public void testNullArguments() {
     IllegalArgumentException ex = null;
 
@@ -38,7 +40,7 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
     } catch (IllegalArgumentException e) {
       ex = e;
     }
-    assertNotNull(ex);
+    Assert.assertNotNull(ex);
 
     ex = null;
 
@@ -47,7 +49,7 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
     } catch (IllegalArgumentException e) {
       ex = e;
     }
-    assertNotNull(ex);
+    Assert.assertNotNull(ex);
 
     ex = null;
     try {
@@ -55,9 +57,10 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
     } catch (IllegalArgumentException e) {
       ex = e;
     }
-    assertNotNull(ex);
+    Assert.assertNotNull(ex);
   }
 
+  @Test
   public void testEmptyArguments() {
     String s1 = "any string";
     String s2 = "";
@@ -66,16 +69,18 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
     getDistanceMetric().computeDistance(s2, s1);
 
     double dist = getDistanceMetric().computeDistance(s2, s2);
-    assertEquals(TestUtils.DISTANCE_EMPTY_EMPTY, dist);
+    Assert.assertEquals(TestUtils.DISTANCE_EMPTY_EMPTY, dist, TestUtils.DELTA);
   }
 
+  @Test
   public void testCommutativity() {
     // run test on manually specified test input
     for (TestInput ti : getTestInput()) {
       double dist1 = getDistanceMetric().computeDistance(ti.s1, ti.s2);
       double dist2 = getDistanceMetric().computeDistance(ti.s2, ti.s1);
 
-      assertEquals("Commutativity Test failed on strings " + ti.s1 + " and " + ti.s2, dist1, dist2);
+      Assert.assertEquals("Commutativity Test failed on strings " + ti.s1 + " and " + ti.s2, dist1,
+                          dist2, TestUtils.DELTA);
     }
     
     // run test on randomly generated strings
@@ -85,18 +90,19 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
 
       double dist1 = getDistanceMetric().computeDistance(s1, s2);
       double dist2 = getDistanceMetric().computeDistance(s2, s1);
-      assertEquals(dist1, dist2);
+      Assert.assertEquals(dist1, dist2, TestUtils.DELTA);
     }
   }
 
+  @Test
   public void testDistanceToSelf() {
     // run test on manually specified test input
     for (TestInput ti : getTestInput()) {
       double dist1 = getDistanceMetric().computeDistance(ti.s1, ti.s1);
       double dist2 = getDistanceMetric().computeDistance(ti.s2, ti.s2);
 
-      assertEquals("'" + ti.s1 + "'", 0.0, dist1);
-      assertEquals("'" + ti.s2 + "'", 0.0, dist2);
+      Assert.assertEquals("'" + ti.s1 + "'", 0.0, dist1, TestUtils.DELTA);
+      Assert.assertEquals("'" + ti.s2 + "'", 0.0, dist2, TestUtils.DELTA);
     }
     
     // run test on randomly generated strings
@@ -104,18 +110,21 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
       String s1 = getValidRandomString();
 
       double dist = getDistanceMetric().computeDistance(s1, s1);
-      assertEquals("'"+s1+"'", TestUtils.DISTANCE_SELF, dist);
+      Assert.assertEquals("'" + s1 + "'", TestUtils.DISTANCE_SELF, dist, TestUtils.DELTA);
     }
   }
 
+  @Test
   public void testDistance() {
     for (TestInput ti : getTestInput()) {
       double dist = getDistanceMetric().computeDistance(ti.s1, ti.s2);
 
-      assertEquals("Input: '" + ti.s1 + "'  and '" + ti.s2 + "'", ti.dist, dist, TestUtils.DELTA);
+      Assert.assertEquals("Input: '" + ti.s1 + "'  and '" + ti.s2 + "'", ti.dist, dist,
+                          TestUtils.DELTA);
     }
   }
 
+  @Test
   public void testRobustness() {
     for (int i = 0; i < TestUtils.N; i++) {
       String s1 = getValidRandomString();
@@ -124,7 +133,7 @@ public abstract class AbstractDistanceMetricTest extends TestCase {
       try {
         getDistanceMetric().computeDistance(s1, s2);
       } catch (Exception e) {
-        fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
+        Assert.fail("Excpection is thrown for input s1='" + s1 + "' and s2='" + s2 + "'");
       }
     }
   }

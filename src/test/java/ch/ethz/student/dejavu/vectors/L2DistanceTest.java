@@ -1,5 +1,7 @@
 package ch.ethz.student.dejavu.vectors;
 
+import org.junit.Test;
+
 import ch.ethz.student.dejavu.AbstractDistanceAndSimilarityMetricTest;
 import ch.ethz.student.dejavu.DistanceMetric;
 import ch.ethz.student.dejavu.SimilarityMetric;
@@ -29,5 +31,17 @@ public class L2DistanceTest extends AbstractDistanceAndSimilarityMetricTest {
   @Override
   protected SimilarityMetric getSimilarityMetric() {
     return metric;
+  }
+
+  @Override
+  @Test(expected = IllegalStateException.class)
+  public void testSimilarityEmptyArguments() {
+    super.testSimilarityEmptyArguments();
+  }
+
+  @Override
+  @Test(expected = IllegalStateException.class)
+  public void testDistanceEmptyArguments() {
+    super.testDistanceEmptyArguments();
   }
 }

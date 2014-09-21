@@ -1,5 +1,7 @@
 package ch.ethz.student.dejavu.vectors;
 
+import org.junit.Test;
+
 import ch.ethz.student.dejavu.AbstractSimilarityMetricTest;
 import ch.ethz.student.dejavu.SimilarityMetric;
 
@@ -24,4 +26,11 @@ public class JaccardSimilarityTest extends AbstractSimilarityMetricTest {
   protected SimilarityMetric getSimilarityMetric() {
     return metric;
   }
+
+  @Override
+  @Test(expected = IllegalStateException.class)
+  public void testEmptyArguments() {
+    super.testEmptyArguments();
+  }
+
 }

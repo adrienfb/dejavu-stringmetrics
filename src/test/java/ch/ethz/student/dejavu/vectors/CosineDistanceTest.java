@@ -1,5 +1,7 @@
 package ch.ethz.student.dejavu.vectors;
 
+import org.junit.Test;
+
 import ch.ethz.student.dejavu.AbstractUnnormalizedSimilarityTest;
 import ch.ethz.student.dejavu.UnnormalizedSimilarityMetric;
 
@@ -23,5 +25,11 @@ public class CosineDistanceTest extends AbstractUnnormalizedSimilarityTest {
   @Override
   protected UnnormalizedSimilarityMetric getSimilarityMetric() {
     return metric;
+  }
+
+  @Override
+  @Test(expected = IllegalStateException.class)
+  public void testEmptyArguments() {
+    super.testEmptyArguments();
   }
 }

@@ -14,9 +14,9 @@
  */
 package ch.ethz.student.dejavu;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public abstract class AbstractDistanceAndSimilarityMetricTest extends TestCase {
+public abstract class AbstractDistanceAndSimilarityMetricTest {
 
   private DistanceMetricTest distanceMetricTest;
   private SimilarityMetricTest similarityMetricTest;
@@ -42,56 +42,69 @@ public abstract class AbstractDistanceAndSimilarityMetricTest extends TestCase {
 
   // ===== Distance Metric Tests =====
 
+  @Test
   public void testDistanceNullArguments() {
     distanceMetricTest.testNullArguments();
   }
 
+  @Test
   public void testDistanceEmptyArguments() {
     distanceMetricTest.testEmptyArguments();
   }
 
+  @Test
   public void testDistanceCommutativity() {
     distanceMetricTest.testCommutativity();
   }
 
+  @Test
   public void testDistanceToSelf() {
     distanceMetricTest.testDistanceToSelf();
   }
 
+  @Test
   public void testDistance() {
     distanceMetricTest.testDistance();
   }
-  
+
+  @Test
   public void testDistanceRobustness() {
     distanceMetricTest.testRobustness();
   }
 
   // ===== Similarity Metric Tests =====
 
+  @Test
   public void testSimilarityNullArguments() {
     similarityMetricTest.testNullArguments();
   }
 
+  @Test
   public void testSimilarityEmptyArguments() {
     similarityMetricTest.testEmptyArguments();
   }
 
+  @Test
   public void testSimilarityCommutativity() {
     similarityMetricTest.testCommutativity();
   }
 
+  @Test
   public void testSimilarityToSelf() {
     similarityMetricTest.testSimilarityToSelf();
   }
 
+  @Test
   public void testSimilarity() {
     similarityMetricTest.testSimilarity();
   }
 
+  @Test
   public void testSimilarityBounds() {
     similarityMetricTest.testSimilarityBounds();
   }
 
+  @Test
   public void testSimilarityRobustness() {
     similarityMetricTest.testRobustness();
   }

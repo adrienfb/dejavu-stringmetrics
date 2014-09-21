@@ -1,5 +1,6 @@
 package ch.ethz.student.dejavu.strings;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import ch.ethz.student.dejavu.AbstractSimilarityMetricTest;
@@ -40,7 +41,7 @@ public class RatcliffObershelpMetricTest extends AbstractSimilarityMetricTest {
       metric.computeSimilarity(s1, s2);
     } catch (StackOverflowError e) {
       e.printStackTrace();
-      fail(e.getMessage());
+      Assert.fail(e.getMessage());
     }
   }
 }
