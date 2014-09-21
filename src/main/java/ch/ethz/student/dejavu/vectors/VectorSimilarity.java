@@ -69,8 +69,8 @@ public abstract class VectorSimilarity {
   protected boolean takeKeyset = false;
 
   // Internal fields
-  protected HashMap<Object, Integer> vec1 = new HashMap<Object, Integer>();
-  protected HashMap<Object, Integer> vec2 = new HashMap<Object, Integer>();
+  protected HashMap<Object, Integer> vec1 = new HashMap<>();
+  protected HashMap<Object, Integer> vec2 = new HashMap<>();
 
   protected HashSet<Object> keys1;
   protected HashSet<Object> keys2;
@@ -91,6 +91,15 @@ public abstract class VectorSimilarity {
       } else {
         vec1 = getTokenVector(s1, vec1);
         vec2 = getTokenVector(s2, vec2);
+      }
+    }
+    if (takeKeyset) {
+      if (keys1.isEmpty() || keys2.isEmpty()) {
+        throw new IllegalStateException("One of the strings has zero tokens. ");
+      }
+    } else {
+      if (vec1.isEmpty() || vec2.isEmpty()) {
+        throw new IllegalStateException("One of the strings has zero tokens. ");
       }
     }
   }
